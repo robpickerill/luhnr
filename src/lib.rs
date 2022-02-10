@@ -100,36 +100,36 @@ mod tests {
     #[test]
     fn test_validate_true() {
         let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 9];
-        assert_eq!(validate(&number), true)
+        assert!(validate(&number))
     }
 
     #[test]
     fn test_validate_false() {
         let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 5];
-        assert_eq!(validate(&number), false)
+        assert!(!validate(&number))
     }
 
     #[test]
     fn test_validate_empty() {
         let number = vec![];
-        assert_eq!(validate(&number), false)
+        assert!(!validate(&number))
     }
 
     #[test]
     fn test_validate_short_true() {
         let number = vec![0];
-        assert_eq!(validate(&number), true)
+        assert!(validate(&number))
     }
 
     #[test]
     fn test_validate_short_false() {
         let number = vec![2];
-        assert_eq!(validate(&number), false)
+        assert!(!validate(&number))
     }
 
     #[test]
     fn test_validate_visa_test() {
         let number = vec![4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2];
-        assert_eq!(validate(&number), true)
+        assert!(validate(&number))
     }
 }
