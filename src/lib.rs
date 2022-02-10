@@ -11,13 +11,10 @@ const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 pub fn validate(number: &[u8]) -> bool {
     match number.len() {
         0 => false,
-        1 => {
-            if number[0] == 0 {
-                true
-            } else {
-                false
-            }
-        }
+        1 => match number[0] {
+            0 => true,
+            _ => false,
+        },
         _ => number[number.len() - 1] == calculate_luhn_sum(&number[..(number.len() - 1)]),
     }
 }
