@@ -9,13 +9,17 @@ pub enum LuhnError {
 const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
 pub fn validate(number: &[u8]) -> bool {
-    let n = number.len();
-
-    if n < 1 {
-        return false;
+    match number.len() {
+        0 => false,
+        1 => {
+            if number[0] == 0 {
+                true
+            } else {
+                false
+            }
+        }
+        _ => number[number.len() - 1] == calculate_luhn_sum(&number[..(number.len() - 1)]),
     }
-
-    return number[n - 1] == calculate_luhn_sum(&number[..n - 2]);
 }
 
 pub fn generate(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
@@ -100,8 +104,38 @@ mod tests {
     }
 
     #[test]
-    fn test_validate() {
+    fn test_validate_true() {
         let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 9];
+        assert_eq!(validate(&number), true)
+    }
+
+    #[test]
+    fn test_validate_false() {
+        let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 5];
+        assert_eq!(validate(&number), false)
+    }
+
+    #[test]
+    fn test_validate_empty() {
+        let number = vec![];
+        assert_eq!(validate(&number), false)
+    }
+
+    #[test]
+    fn test_validate_short_true() {
+        let number = vec![0];
+        assert_eq!(validate(&number), true)
+    }
+
+    #[test]
+    fn test_validate_short_false() {
+        let number = vec![2];
+        assert_eq!(validate(&number), false)
+    }
+
+    #[test]
+    fn test_validate_visa_test() {
+        let number = vec![4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2];
         assert_eq!(validate(&number), true)
     }
 }
