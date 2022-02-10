@@ -6,9 +6,9 @@ pub enum LuhnError {
     InvalidPrefix,
 }
 
-const DOUBLERESULT: [usize; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
+const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
-pub fn generate(length: usize, prefix: &[usize]) -> Result<Vec<usize>, LuhnError> {
+pub fn generate(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
     if length < 1 || prefix.len() > length {
         return Err(LuhnError::InvalidLength);
     };
@@ -22,7 +22,7 @@ pub fn generate(length: usize, prefix: &[usize]) -> Result<Vec<usize>, LuhnError
     let step = Uniform::from(1..10);
     let mut rng = rand::thread_rng();
 
-    let mut number: Vec<usize> = Vec::with_capacity(length);
+    let mut number: Vec<u8> = Vec::with_capacity(length);
     number.extend_from_slice(prefix);
 
     let mut n = prefix.len();
@@ -31,18 +31,18 @@ pub fn generate(length: usize, prefix: &[usize]) -> Result<Vec<usize>, LuhnError
         n += 1;
     }
 
-    number.push(calculate_luhn_sum(number.clone()));
+    number.push(calculate_luhn_sum(&number));
     Ok(number)
 }
 
-fn calculate_luhn_sum(number: Vec<usize>) -> usize {
-    let mut n = number.len();
+fn calculate_luhn_sum(number: &[u8]) -> u8 {
+    let mut n: usize = number.len();
     let mut double = true;
     let mut sum = 0;
 
     while n > 0 {
         sum += match double {
-            true => DOUBLERESULT[number[n - 1]],
+            true => DOUBLERESULT[number[n - 1] as usize],
             false => number[n - 1],
         };
 
@@ -75,7 +75,7 @@ mod tests {
         let prefix = vec![20, 10];
         match generate(10, &prefix) {
             Err(error) => assert_eq!(error, LuhnError::InvalidPrefix),
-            Ok(_) => panic!("failed to catch invalid prefix"),
+            Ok(_) => panic!("failed to catch empty length"),
         }
     }
 
