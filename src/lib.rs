@@ -8,6 +8,16 @@ pub enum LuhnError {
 
 const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
+pub fn validate(number: &[u8]) -> bool {
+    let n = number.len();
+
+    if n < 1 {
+        return false;
+    }
+
+    return number[n - 1] == calculate_luhn_sum(&number[..n - 2]);
+}
+
 pub fn generate(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
     if length < 1 || prefix.len() > length {
         return Err(LuhnError::InvalidLength);
@@ -87,5 +97,11 @@ mod tests {
             Ok(v) => assert_eq!(result, v),
             Err(_) => panic!("unexpected err result"),
         }
+    }
+
+    #[test]
+    fn test_validate() {
+        let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 9];
+        assert_eq!(validate(&number), true)
     }
 }
