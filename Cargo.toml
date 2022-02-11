@@ -1,5 +1,13 @@
 [package]
 name = "luhnr"
+description = "a simple, but efficient, luhn number generator and validator"
+documentation = "https://github.com/robpickerill/luhnr/blob/main/README.md"
+readme = "README.md"
+homepage = "https://github.com/robpickerill/luhnr/"
+repository = "https://github.com/robpickerill/luhnr/"
+keywords = ["luhn"]
+exclude = ["/.github", "/benches", ".gitignore"]
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
 
