@@ -16,7 +16,7 @@ pub fn validate(number: &[u8]) -> bool {
     }
 }
 
-pub fn generate(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
+pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
     if length < 1 || prefix.len() > length {
         return Err(LuhnError::InvalidLength);
     };
@@ -41,6 +41,11 @@ pub fn generate(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
 
     number.push(calculate_luhn_sum(&number));
     Ok(number)
+}
+
+pub fn generate(length: usize) -> Result<Vec<u8>, LuhnError> {
+    let prefix = vec![];
+    generate_with_prefix(length, &prefix)
 }
 
 fn calculate_luhn_sum(number: &[u8]) -> u8 {
@@ -70,9 +75,27 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_generate_length() {
+        assert_eq!(generate(16).unwrap().len(), 16)
+    }
+
+    #[test]
+    fn test_generate_prefix_length() {
+        let prefix = vec![0, 1];
+        assert_eq!(generate_with_prefix(16, &prefix).unwrap().len(), 16)
+    }
+
+    #[test]
+    fn test_generate_prefix() {
+        let prefix = vec![0, 1];
+        let result = generate_with_prefix(16, &prefix).unwrap();
+        assert_eq!(result[..2], prefix)
+    }
+
+    #[test]
     fn test_generate_invalid_length() {
         let prefix = vec![0, 1];
-        match generate(1, &prefix) {
+        match generate_with_prefix(1, &prefix) {
             Err(error) => assert_eq!(error, LuhnError::InvalidLength),
             Ok(_) => panic!("failed to catch empty length"),
         }
@@ -81,9 +104,9 @@ mod tests {
     #[test]
     fn test_generate_invalid_prefix() {
         let prefix = vec![20, 10];
-        match generate(10, &prefix) {
+        match generate_with_prefix(10, &prefix) {
             Err(error) => assert_eq!(error, LuhnError::InvalidPrefix),
-            Ok(_) => panic!("failed to catch empty length"),
+            Ok(_) => panic!("failed to catch prefix error"),
         }
     }
 
@@ -91,7 +114,7 @@ mod tests {
     fn test_generate() {
         let prefix = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3];
         let result = [prefix.clone(), vec![9]].concat();
-        match generate(16, &prefix) {
+        match generate_with_prefix(16, &prefix) {
             Ok(v) => assert_eq!(result, v),
             Err(_) => panic!("unexpected err result"),
         }
