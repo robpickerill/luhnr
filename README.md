@@ -19,14 +19,13 @@ fn main() {
 
 ### Generate
 
-Generate will generate a luhn compliant number, thats meets the length passed in, and optionally meets the prefix that is passed in.
+Generate will generate a luhn compliant number, thats meets the length passed in.
 
 ```Rust
 use luhnr;
 
 fn main() {
-  let number = vec![];
-  match luhnr::generate(16, &number) {
+  match luhnr::generate(16) {
     Ok(v) => println!("The number is: {:?}", v),
     Err(e) => println!("recieved error: {:?}", e),
   }
