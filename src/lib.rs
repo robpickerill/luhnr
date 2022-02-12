@@ -51,12 +51,12 @@ pub fn generate(length: usize) -> Result<Vec<u8>, LuhnError> {
 fn calculate_luhn_sum(number: &[u8]) -> u8 {
     let mut n: usize = number.len();
     let mut double = true;
-    let mut sum = 0;
+    let mut sum: usize = 0;
 
     while n > 0 {
         sum += match double {
-            true => DOUBLERESULT[number[n - 1] as usize],
-            false => number[n - 1],
+            true => DOUBLERESULT[number[n - 1] as usize] as usize,
+            false => number[n - 1] as usize,
         };
 
         double = !double;
@@ -66,7 +66,7 @@ fn calculate_luhn_sum(number: &[u8]) -> u8 {
     let checksum = sum % 10;
     match checksum {
         0 => 0,
-        _ => 10 - checksum,
+        _ => 10 - checksum as u8,
     }
 }
 
