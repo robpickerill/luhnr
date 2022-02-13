@@ -80,6 +80,11 @@ mod tests {
     }
 
     #[test]
+    fn test_generate_long() {
+        assert_eq!(generate(2000000).unwrap().len(), 2000000)
+    }
+
+    #[test]
     fn test_generate_prefix_length() {
         let prefix = vec![0, 1];
         assert_eq!(generate_with_prefix(16, &prefix).unwrap().len(), 16)
