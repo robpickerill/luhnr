@@ -1,6 +1,6 @@
 use rand::distributions::{Distribution, Uniform};
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum LuhnError {
     InvalidLength,
     InvalidPrefix,
@@ -27,40 +27,36 @@ pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, Luh
         }
     }
 
-    let step = Uniform::from(1..10);
+    let step = Uniform::from(0..9);
     let mut rng = rand::thread_rng();
 
-    let mut number: Vec<u8> = Vec::with_capacity(length);
-    number.extend_from_slice(prefix);
+    let mut number = vec![0; length];
+    number[..prefix.len()].copy_from_slice(prefix);
 
-    let mut n = prefix.len();
-    while n < length - 1 {
-        number.push(step.sample(&mut rng));
-        n += 1;
+    for num in number.iter_mut().take(length - 1).skip(prefix.len()) {
+        *num = step.sample(&mut rng);
     }
 
-    number.push(calculate_luhn_sum(&number));
+    number[length - 1] = calculate_luhn_sum(&number[..length - 1]);
     Ok(number)
 }
 
 pub fn generate(length: usize) -> Result<Vec<u8>, LuhnError> {
-    let prefix = vec![];
-    generate_with_prefix(length, &prefix)
+    generate_with_prefix(length, &[])
 }
 
 fn calculate_luhn_sum(number: &[u8]) -> u8 {
-    let mut n: usize = number.len();
     let mut double = true;
     let mut sum: usize = 0;
 
-    while n > 0 {
-        sum += match double {
-            true => DOUBLERESULT[number[n - 1] as usize] as usize,
-            false => number[n - 1] as usize,
+    for digit in number.iter().rev() {
+        sum += if double {
+            DOUBLERESULT[*digit as usize] as usize
+        } else {
+            *digit as usize
         };
 
         double = !double;
-        n -= 1;
     }
 
     let checksum = sum % 10;
@@ -159,5 +155,13 @@ mod tests {
     fn test_validate_visa_test() {
         let number = vec![4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2, 4, 2];
         assert!(validate(&number))
+    }
+
+    #[test]
+    fn test_generate_validate() {
+        (0..100).for_each(|_| {
+            let number = generate(16).unwrap();
+            assert!(validate(&number))
+        })
     }
 }
