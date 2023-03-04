@@ -68,6 +68,8 @@ fn calculate_luhn_sum(number: &[u8]) -> u8 {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashSet;
+
     use super::*;
 
     #[test]
@@ -163,5 +165,19 @@ mod tests {
             let number = generate(16).unwrap();
             assert!(validate(&number))
         })
+    }
+
+    #[test]
+    fn test_all_numbers_0_to_9() {
+        let mut num_check: HashSet<u8> = HashSet::new();
+        let number = generate(200).unwrap();
+
+        for num in number {
+            num_check.insert(num);
+        }
+
+        for i in 0..10 {
+            assert!(num_check.contains(&i), "missing {} from generate", i);
+        }
     }
 }
