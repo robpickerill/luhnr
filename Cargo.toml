@@ -14,7 +14,7 @@ edition = "2021"
 rand = "0.8.4"
 
 [dev-dependencies]
-criterion = "0.3"
+criterion = "0.4"
 
 [[bench]]
 name = "luhn_benchmark"
