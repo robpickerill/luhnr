@@ -27,7 +27,7 @@ pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, Luh
         }
     }
 
-    let step = Uniform::from(0..9);
+    let step = Uniform::from(0..10); // half-open range
     let mut rng = rand::thread_rng();
 
     let mut number = vec![0; length];
