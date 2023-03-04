@@ -1,6 +1,6 @@
 use rand::distributions::{Distribution, Uniform};
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum LuhnError {
     InvalidLength,
     InvalidPrefix,
@@ -33,8 +33,8 @@ pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, Luh
     let mut number = vec![0; length];
     number[..prefix.len()].copy_from_slice(prefix);
 
-    for i in prefix.len()..length - 1 {
-        number[i] = step.sample(&mut rng);
+    for num in number.iter_mut().take(length - 1).skip(prefix.len()) {
+        *num = step.sample(&mut rng);
     }
 
     number[length - 1] = calculate_luhn_sum(&number[..length - 1]);
