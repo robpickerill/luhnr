@@ -76,7 +76,7 @@ fn main() {
 
 Criterion benchmarks are provided in [./benches](benches/). 
 
-On an Intel Core i9, 2.4GHz, MacBook Pro:
+On an Intel Core i9, MacBook Pro:
 
 ```
 generate                time:   [133.52 ns 133.93 ns 134.41 ns]
