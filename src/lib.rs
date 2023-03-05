@@ -8,6 +8,7 @@ pub enum LuhnError {
 
 const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
+// validates a string of digits for luhn/mod10.
 pub fn validate(number: &[u8]) -> bool {
     match number.len() {
         0 => false,
@@ -16,6 +17,9 @@ pub fn validate(number: &[u8]) -> bool {
     }
 }
 
+// validates a string of digits for luhn/mod10. Note that this function is
+// a lot slower than `validate` due to the need to convert the string to
+// a vector of digits.
 pub fn validate_str(number: &str) -> bool {
     let numbers = number
         .chars()
@@ -24,6 +28,7 @@ pub fn validate_str(number: &str) -> bool {
     validate(&numbers)
 }
 
+// generates a random number from a prefix, of a given length, that passes the luhn check.
 pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
     if length < 1 || prefix.len() > length {
         return Err(LuhnError::InvalidLength);
@@ -49,6 +54,9 @@ pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, Luh
     Ok(number)
 }
 
+// generates a random number from a prefix, of a given length, that passes the luhn check.
+// Note that this function is a lot slower than `generate_with_prefix` due to the need
+// to convert the string to a vector of digits.
 pub fn generate_with_prefix_str(length: usize, prefix: &str) -> Result<String, LuhnError> {
     let prefix = prefix
         .chars()
@@ -58,10 +66,14 @@ pub fn generate_with_prefix_str(length: usize, prefix: &str) -> Result<String, L
     Ok(number.iter().map(|x| x.to_string()).collect())
 }
 
+// generates a random number of a given length that passes the luhn check.
 pub fn generate(length: usize) -> Result<Vec<u8>, LuhnError> {
     generate_with_prefix(length, &[])
 }
 
+// generates a random number of a given length that passes the luhn check.
+// Note that this function is a lot slower than `generate` due to the need
+// to convert the string to a vector of digits.
 pub fn generate_str(length: usize) -> Result<String, LuhnError> {
     let number = generate(length)?;
     Ok(number.iter().map(|x| x.to_string()).collect())

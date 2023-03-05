@@ -4,6 +4,10 @@ A simple, but efficient, luhn number generator and validator for Rust.
 
 ## Usage
 
+[API Docs](https://docs.rs/luhnr/0.3.3/luhnr/)
+
+### Quick Start
+
 ### Validate Luhn Number
 
 Validate will return `true` if the vector of numbers passes Luhn's algorithm, or `false` if it fails.
