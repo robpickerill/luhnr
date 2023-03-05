@@ -1,8 +1,34 @@
 # luhnr
 
-A simple, but efficient, luhn number generator and validator for Rust.
+- [luhnr](#luhnr)
+  - [Usage](#usage)
+    - [Quick Start](#quick-start)
+    - [Validate Luhn Number](#validate-luhn-number)
+    - [Generate](#generate)
+  - [Benchmarks](#benchmarks)
+
+
+A simple, but efficient, luhn number generator and validator for Rust. 
+
+I wrote this library as I couldn't find a performant mod10 library available for Rust.
 
 ## Usage
+
+[API Docs](https://docs.rs/luhnr/0.3.4/luhnr/)
+
+_Note: the library is written for the performant path to be the functions that accept a slice of u8's:_
+
+- _`validate(number: &[u8])`_
+- _`generate_with_prefix(length: usize, prefix: &[u8])`_
+- _`generate(length: usize)`_
+
+_The `_str` methods are exponentially slower due to having to additional allocations, and are only provided only as convenience:_
+
+- _`validate_str(number: &str)`_
+- _`generate_with_prefix_str(length: usize, prefix: &str)`_
+- _`generate_str(length: usize)`_
+
+### Quick Start
 
 ### Validate Luhn Number
 
@@ -44,4 +70,15 @@ fn main() {
     Err(e) => println!("recieved error: {:?}", e),
   }
 }
+```
+
+## Benchmarks
+
+Criterion benchmarks are provided in [./benches](benches/). 
+
+On an Intel Core i9, 2.4GHz, 8 core MacBook Pro:
+
+```
+generate                time:   [133.52 ns 133.93 ns 134.41 ns]
+generate_str            time:   [1.1067 µs 1.1201 µs 1.1368 µs]
 ```

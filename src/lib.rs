@@ -8,6 +8,7 @@ pub enum LuhnError {
 
 const DOUBLERESULT: [u8; 10] = [0, 2, 4, 6, 8, 1, 3, 5, 7, 9];
 
+// validates a string of digits for luhn/mod10.
 pub fn validate(number: &[u8]) -> bool {
     match number.len() {
         0 => false,
@@ -16,6 +17,18 @@ pub fn validate(number: &[u8]) -> bool {
     }
 }
 
+// validates a string of digits for luhn/mod10. Note that this function is
+// a lot slower than `validate` due to the need to convert the string to
+// a vector of digits.
+pub fn validate_str(number: &str) -> bool {
+    let numbers = number
+        .chars()
+        .map(|x| x.to_digit(10).unwrap() as u8)
+        .collect::<Vec<u8>>();
+    validate(&numbers)
+}
+
+// generates a random number from a prefix, of a given length, that passes the luhn check.
 pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, LuhnError> {
     if length < 1 || prefix.len() > length {
         return Err(LuhnError::InvalidLength);
@@ -41,8 +54,29 @@ pub fn generate_with_prefix(length: usize, prefix: &[u8]) -> Result<Vec<u8>, Luh
     Ok(number)
 }
 
+// generates a random number from a prefix, of a given length, that passes the luhn check.
+// Note that this function is a lot slower than `generate_with_prefix` due to the need
+// to convert the string to a vector of digits.
+pub fn generate_with_prefix_str(length: usize, prefix: &str) -> Result<String, LuhnError> {
+    let prefix = prefix
+        .chars()
+        .map(|x| x.to_digit(10).unwrap() as u8)
+        .collect::<Vec<u8>>();
+    let number = generate_with_prefix(length, &prefix)?;
+    Ok(number.iter().map(|x| x.to_string()).collect())
+}
+
+// generates a random number of a given length that passes the luhn check.
 pub fn generate(length: usize) -> Result<Vec<u8>, LuhnError> {
     generate_with_prefix(length, &[])
+}
+
+// generates a random number of a given length that passes the luhn check.
+// Note that this function is a lot slower than `generate` due to the need
+// to convert the string to a vector of digits.
+pub fn generate_str(length: usize) -> Result<String, LuhnError> {
+    let number = generate(length)?;
+    Ok(number.iter().map(|x| x.to_string()).collect())
 }
 
 fn calculate_luhn_sum(number: &[u8]) -> u8 {
@@ -96,6 +130,13 @@ mod tests {
     }
 
     #[test]
+    fn test_generate_prefix_str() {
+        let prefix = "01";
+        let result = generate_with_prefix_str(16, prefix).unwrap();
+        assert_eq!(&result[..2], prefix)
+    }
+
+    #[test]
     fn test_generate_invalid_length() {
         let prefix = vec![0, 1];
         match generate_with_prefix(1, &prefix) {
@@ -124,15 +165,38 @@ mod tests {
     }
 
     #[test]
+    fn test_generate_str() {
+        let result = generate_str(16).unwrap();
+        let numbers = result
+            .chars()
+            .map(|x| x.to_digit(10).unwrap() as u8)
+            .collect::<Vec<u8>>();
+
+        assert!(validate(&numbers))
+    }
+
+    #[test]
     fn test_validate_true() {
         let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 9];
         assert!(validate(&number))
     }
 
     #[test]
+    fn test_validate_str_true() {
+        let number = "0189953664571539";
+        assert!(validate_str(number))
+    }
+
+    #[test]
     fn test_validate_false() {
         let number = vec![0, 1, 8, 9, 9, 5, 3, 6, 6, 4, 5, 7, 1, 5, 3, 5];
         assert!(!validate(&number))
+    }
+
+    #[test]
+    fn test_validate_str_false() {
+        let number = "0189953664571535";
+        assert!(!validate_str(number))
     }
 
     #[test]
