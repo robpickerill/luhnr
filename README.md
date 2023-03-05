@@ -1,5 +1,13 @@
 # luhnr
 
+- [luhnr](#luhnr)
+  - [Usage](#usage)
+    - [Quick Start](#quick-start)
+    - [Validate Luhn Number](#validate-luhn-number)
+    - [Generate](#generate)
+  - [Benchmarks](#benchmarks)
+
+
 A simple, but efficient, luhn number generator and validator for Rust. 
 
 I wrote this library as I couldn't find a performant mod10 library available for Rust.
@@ -62,4 +70,15 @@ fn main() {
     Err(e) => println!("recieved error: {:?}", e),
   }
 }
+```
+
+## Benchmarks
+
+Criterion benchmarks are provided in [./benches](benches/). 
+
+On an Intel Core i9, 2.4GHz, 8 core MacBook Pro:
+
+```
+generate                time:   [133.52 ns 133.93 ns 134.41 ns]
+generate_str            time:   [1.1067 µs 1.1201 µs 1.1368 µs]
 ```
