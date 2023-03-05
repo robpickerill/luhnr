@@ -8,7 +8,7 @@
   - [Benchmarks](#benchmarks)
 
 
-A simple, but efficient, luhn number generator and validator for Rust. 
+A simple, but efficient, luhn/mod10 number generator and validator for Rust. 
 
 I wrote this library as I couldn't find a performant mod10 library available for Rust.
 
