@@ -4,7 +4,7 @@ A simple, but efficient, luhn number generator and validator for Rust.
 
 ## Usage
 
-[API Docs](https://docs.rs/luhnr/0.3.3/luhnr/)
+[API Docs](https://docs.rs/luhnr/0.3.4/luhnr/)
 
 ### Quick Start
 
