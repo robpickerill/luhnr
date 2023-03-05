@@ -7,7 +7,7 @@ homepage = "https://github.com/robpickerill/luhnr/"
 repository = "https://github.com/robpickerill/luhnr/"
 keywords = ["luhn", "mod10", "modulus10"]
 license = "MIT OR Apache-2.0"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2021"
 
 [dependencies]
