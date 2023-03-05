@@ -22,7 +22,7 @@ Note: the library is written for the performant path to be the functions that ac
 - `generate_with_prefix(length: usize, prefix: &[u8])`
 - `generate(length: usize)`
 
-The `_str` methods are exponentially slower due to having to additional allocations, and are only provided as convenience:
+The `_str` methods are exponentially slower due to having to perform additional allocations, and are only provided as convenience:
 
 - `validate_str(number: &str)`
 - `generate_with_prefix_str(length: usize, prefix: &str)`
