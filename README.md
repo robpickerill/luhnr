@@ -1,10 +1,24 @@
 # luhnr
 
-A simple, but efficient, luhn number generator and validator for Rust.
+A simple, but efficient, luhn number generator and validator for Rust. 
+
+I wrote this library as I couldn't find a performant mod10 library available for Rust.
 
 ## Usage
 
 [API Docs](https://docs.rs/luhnr/0.3.4/luhnr/)
+
+_Note: the library is written for the performant path to be the functions that accept a slice of u8's:_
+
+- _`validate(number: &[u8])`_
+- _`generate_with_prefix(length: usize, prefix: &[u8])`_
+- _`generate(length: usize)`_
+
+_The `_str` methods are exponentially slower due to having to additonal allocations, and are provided only as convenience:_
+
+- _`validate_str(number: &str)`_
+- _`generate_with_prefix_str(length: usize, prefix: &str)`_
+- _`generate_str(length: usize)`_
 
 ### Quick Start
 
