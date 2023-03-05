@@ -22,7 +22,7 @@ Note: the library is written for the performant path to be the functions that ac
 - `generate_with_prefix(length: usize, prefix: &[u8])`
 - `generate(length: usize)`
 
-The `_str` methods are exponentially slower due to having to additional allocations, and are only provided only as convenience:
+The `_str` methods are exponentially slower due to having to additional allocations, and are only provided as convenience:
 
 - `validate_str(number: &str)`
 - `generate_with_prefix_str(length: usize, prefix: &str)`
@@ -76,7 +76,7 @@ fn main() {
 
 Criterion benchmarks are provided in [./benches](benches/). 
 
-On an Intel Core i9, 2.4GHz, 8 core MacBook Pro:
+On an Intel Core i9, 2.4GHz, MacBook Pro:
 
 ```
 generate                time:   [133.52 ns 133.93 ns 134.41 ns]
