@@ -10,7 +10,7 @@
 
 A simple, but efficient, luhn/mod10 number generator and validator for Rust. 
 
-I wrote this library as I couldn't find a performant mod10 library available for Rust.
+I wrote this library as I couldn't find a performant mod10 library available for Rust, and had a need for one.
 
 ## Usage
 
